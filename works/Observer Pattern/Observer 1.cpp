@@ -1,20 +1,17 @@
-﻿#include <iostream>
+#include <iostream>
 #include <list>
 using namespace std;
 
 class Observer {
 public:
-    virtual void update() = 0;
+    virtual void update(string comment) = 0;
 };
 
 class Subscriber : Observer {
     string name;
-    string comment = "댓글";
 public:
-    void update() { cout << name << " : " << comment << endl; }
+    void update(string comment) { cout << name << " : " << comment << endl; }
     Subscriber(string n) : name(n) {}
-    Subscriber(string n, string c) : name(n), comment(c) {}
-    void setComment(string c) { comment = c; }
 };
 
 class Youtuber {
@@ -31,25 +28,24 @@ public:
             }
         }
     }
-    void notify() { for (auto i : subscribers) { i->update(); } }
+    void notify(string comment) { for (auto i : subscribers) { i->update(comment); } }
 };
 
 int main()
 {
     Youtuber OliverSam;
-    Subscriber song("송보현", "와~");
-    Subscriber yu("유동수", "?");
-    Subscriber kim("김영한", "ㅋㅋ");
+    Subscriber song("송보현");
+    Subscriber yu("유동수");
+    Subscriber kim("김영한");
 
     OliverSam.addSubscriber(&song);
     OliverSam.addSubscriber(&yu);
     OliverSam.addSubscriber(&kim);
 
-    OliverSam.notify();
+    OliverSam.notify("댓글 알림");
 
     OliverSam.removeSubscriber(&yu);
     OliverSam.removeSubscriber(&kim);
-    song.setComment("보소");
 
-    OliverSam.notify();
+    OliverSam.notify("영상 올림");
 }
